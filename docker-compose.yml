@@ -10,20 +10,10 @@ services:
       - ZOO_LOG4J_PROP=INFO,ROLLINGFILE
     ports:
       - 2181:2181
-    networks:
-      - broker_network
     volumes:
       - zookeeper_data:/data
       - zookeeper_datalog:/datalog
       - zookeeper_logs:/logs
-    deploy:
-      resources:
-        limits:
-          cpus: '1'
-          memory: 1024M
-        reservations:
-          cpus: '0.25'
-          memory: 256M
 
   broker:
     image: broker
@@ -31,8 +21,6 @@ services:
       - TZ=America/Guayaquil
     ports:
       - 9093:9093
-    networks:
-      - broker_network
     volumes:
       - broker_data:/data
       - broker_logs:/kafka/logs
@@ -44,27 +32,10 @@ services:
       --override inter.broker.listener.name=INTERNAL
       --override listeners=INTERNAL://0.0.0.0:9092,EXTERNAL://0.0.0.0:9093
       --override advertised.listeners=INTERNAL://broker:9092,EXTERNAL://localhost:9093
-    deploy:
-      resources:
-        limits:
-          cpus: '1'
-          memory: 1024M
-        reservations:
-          cpus: '0.25'
-          memory: 256M
 
 volumes:
   broker_data:
-    external: true
   broker_logs:
-    external: true
   zookeeper_data:
-    external: true
   zookeeper_logs:
-    external: true
   zookeeper_datalog:
-    external: true
-
-networks:
-  broker_network:
-    external: true

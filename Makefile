@@ -2,15 +2,7 @@ build:
 	@ docker build -t broker .
 
 run: build
-	@ docker stack deploy --with-registry-auth -c docker-compose.yml broker
-
-init:
-	@ docker network create --driver overlay --scope swarm broker_network  || true
-	@ docker volume create zookeeper_data || true
-	@ docker volume create zookeeper_datalog || true
-	@ docker volume create zookeeper_logs || true
-	@ docker volume create broker_data || true
-	@ docker volume create broker_logs || true
+	@ docker stack deploy -c docker-compose.yml broker
 
 status:
 	@ docker stack ps broker

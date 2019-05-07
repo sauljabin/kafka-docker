@@ -5,18 +5,12 @@
 - [zookeeper](https://hub.docker.com/_/zookeeper) v3.14
 - [kafka](https://kafka.apache.org/quickstart) v2.12-2.1.1
 
+## Links
+
+- https://github.com/31z4/zookeeper-docker
+- https://hub.docker.com/_/zookeeper
+
 ## Comandos Locales
-
-#### Inicializa la network y volumes de docker:
-```
-$ make init
-```
-
-> Red: `broker_network`
-
-> Datos: `zookeeper_data`, `zookeeper_datalog`, `broker_data`
-
-> Logs:`zookeeper_logs`, `broker_logs`
 
 #### Construye la imagen de docker `broker`:
 ```
