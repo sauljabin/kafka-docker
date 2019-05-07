@@ -1,5 +1,6 @@
 build:
-	@ docker build -t kafka .
+	@ docker build -t kafka -f Dockerfile.kafka .
+	@ docker build -t openssl -f Dockerfile.openssl .
 
 run: build
 	@ docker stack deploy -c docker-compose.yml kafka
@@ -46,3 +47,7 @@ console-consumer:
 	@ docker run -it --rm --entrypoint /bin/bash --network host kafka \
 	bin/kafka-console-consumer.sh --bootstrap-server localhost:9093 \
 	--topic $(topic) --from-beginning
+
+generate-cert:
+	@ docker run -it --rm openssl req -new -newkey rsa:4096 -days 365 \
+	-x509 -subj "/CN=Kafka-Security-CA" -keyout ca-key -out ca-cert -nodes
