@@ -10,9 +10,9 @@
 - https://github.com/31z4/zookeeper-docker
 - https://hub.docker.com/_/zookeeper
 
-## Comandos Locales
+## Comandos Docker
 
-#### Construye la imagen de docker `broker`:
+#### Construye la imagen de docker `kafka:latest`:
 ```
 $ make build
 ```
@@ -34,7 +34,7 @@ $ make stop
 
 #### Muestra los logs del broker:
 ```
-$ make log-broker
+$ make log-kafka
 ```
 
 #### Muestra los logs de zookeeper:
@@ -44,13 +44,15 @@ $ make log-zookeeper
 
 #### Crea una instancia del broker y abre un terminal:
 ```
-$ make bash-broker
+$ make bash-kafka
 ```
 
 #### Crea una instancia de zookeeper y abre un terminal:
 ```
 $ make bash-zookeeper
 ```
+
+## Comandos Kafka
 
 #### Crea un tópico de prueba (`default`):
 ```

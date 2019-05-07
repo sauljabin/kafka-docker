@@ -1,25 +1,25 @@
 build:
-	@ docker build -t broker .
+	@ docker build -t kafka .
 
 run: build
-	@ docker stack deploy -c docker-compose.yml broker
+	@ docker stack deploy -c docker-compose.yml kafka
 
 status:
-	@ docker stack ps broker
+	@ docker stack ps kafka
 
 stop:
-	@ docker stack rm broker
+	@ docker stack rm kafka
 
-log-broker:
-	@ docker service logs -f broker_broker
+log-kafka:
+	@ docker service logs -f kafka_kafka
 
 log-zookeeper:
-	@ docker service logs -f broker_zookeeper
+	@ docker service logs -f kafka_zookeeper
 
-bash-broker:
+bash-kafka:
 	@ docker run -it --rm --entrypoint /bin/bash \
-	-v broker_data:/data -v broker_logs:/kafka/logs \
-	broker
+	-v kafka_data:/data -v kafka_logs:/kafka/logs \
+	kafka
 
 bash-zookeeper:
 	@ docker run -it --rm --entrypoint /bin/bash -v zookeeper_data:/data \
@@ -29,20 +29,20 @@ bash-zookeeper:
 topic=default
 
 create-topic:
-	@ docker run -it --rm --entrypoint /bin/bash --network host broker \
+	@ docker run -it --rm --entrypoint /bin/bash --network host kafka \
 	bin/kafka-topics.sh --create --zookeeper localhost:2181 \
 	--replication-factor 1 --partitions 1 --topic $(topic)
 
 list-topic:
-	@ docker run -it --rm --entrypoint /bin/bash --network host broker \
+	@ docker run -it --rm --entrypoint /bin/bash --network host kafka \
 	bin/kafka-topics.sh --list --zookeeper localhost:2181
 
 console-producer:
-	@ docker run -it --rm --entrypoint /bin/bash --network host broker \
+	@ docker run -it --rm --entrypoint /bin/bash --network host kafka \
 	bin/kafka-console-producer.sh --broker-list localhost:9093 \
 	--topic $(topic)
 
 console-consumer:
-	@ docker run -it --rm --entrypoint /bin/bash --network host broker \
+	@ docker run -it --rm --entrypoint /bin/bash --network host kafka \
 	bin/kafka-console-consumer.sh --bootstrap-server localhost:9093 \
 	--topic $(topic) --from-beginning
