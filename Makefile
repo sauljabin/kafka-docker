@@ -1,5 +1,5 @@
 build:
-	@ docker build -t kafka -f Dockerfile.kafka .
+	@ docker build -t kafka .
 
 run: build
 	@ docker stack deploy -c docker-compose.yml kafka
@@ -47,8 +47,8 @@ console-consumer:
 	bin/kafka-console-consumer.sh --bootstrap-server localhost:9093 \
 	--topic $(topic) --from-beginning
 
-generate-cert:
-	@ docker build -t openssl -f Dockerfile.openssl .
+generate-ca-cert:
 	@ docker volume create kafka_certificates
-	@ docker run -it --rm -v kafka_certificates:/certs openssl req -new -newkey rsa:4096 -days 365 \
+	@ docker run -it --rm -v kafka_certificates:/certs -w /certs openjdk:8-jre openssl req -new -newkey rsa:4096 -days 365 \
 	-x509 -subj "/CN=Kafka-Security-CA" -keyout ca-key -out ca-cert -nodes
+	@ docker run -it --rm -v kafka_certificates:/certs -w /certs openjdk:8-jre keytool -printcert -v -file ca-cert
