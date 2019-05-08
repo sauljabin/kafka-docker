@@ -6,6 +6,7 @@ openssl=docker run -it --rm -v kafka_certificates:/certs -w /certs --network hos
 bash=docker run -it --rm --entrypoint /bin/bash --network host
 
 topic=default
+group=default
 instance=1
 
 build:
@@ -95,6 +96,9 @@ run-multiple: build
 
 create-topic-multiple:
 	@ $(bash) kafka bin/kafka-topics.sh --create --zookeeper localhost:2181 --replication-factor 3 --partitions 3 --topic $(topic)
+
+console-consumer-multiple:
+	@ $(bash) kafka bin/kafka-console-consumer.sh --bootstrap-server localhost:9093 --topic $(topic) --from-beginning --consumer-property group.id=$(group)
 
 log-kafka-multiple:
 	@ docker service logs -f kafka_kafka$(instance)

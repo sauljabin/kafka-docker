@@ -148,3 +148,13 @@ $ make create-topic-multiple topic=test
 ```
 $ make log-kafka-multiple instance=1
 ```
+
+#### Ejemplo de consumidor (tópico `default`, grupo `default`):
+```
+$ make console-consumer-multiple
+```
+
+#### Ejemplo de consumidor:
+```
+$ make console-consumer-multiple topic=test group=test
+```
