@@ -8,7 +8,7 @@ bash=docker run -it --rm --entrypoint /bin/bash --network host
 topic=default
 
 build:
-	@ docker build -t kafka --build-arg SCALA_VERSION=$(SCALA_VERSION) --build-arg KAFKA_VERSION=$(KAFKA_VERSION) .
+	@ docker build -t kafka:latest -t kafka:$(KAFKA_VERSION) --build-arg SCALA_VERSION=$(SCALA_VERSION) --build-arg KAFKA_VERSION=$(KAFKA_VERSION) .
 
 run: build
 	@ docker stack deploy -c docker-compose.yml kafka
@@ -32,7 +32,7 @@ bash-kafka:
 	@ $(bash) -v kafka_data:/data -v kafka_logs:/kafka/logs -v kafka_certificates:/certs kafka
 
 bash-zookeeper:
-	@ $(bash) -v zookeeper_data:/data -v zookeeper_datalog:/datalog -v zookeeper_logs:/logs zookeeper:3.4
+	@ $(bash) -v zookeeper_data:/data -v zookeeper_datalog:/datalog -v zookeeper_logs:/logs zookeeper:$(ZOOKEEPER_VERSION)
 
 create-topic:
 	@ $(bash) kafka bin/kafka-topics.sh --create --zookeeper localhost:2181 --replication-factor 1 --partitions 1 --topic $(topic)
