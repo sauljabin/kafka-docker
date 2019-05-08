@@ -6,6 +6,7 @@ openssl=docker run -it --rm -v kafka_certificates:/certs -w /certs --network hos
 bash=docker run -it --rm --entrypoint /bin/bash --network host
 
 topic=default
+instance=1
 
 build:
 	@ docker build -t kafka:latest -t kafka:$(KAFKA_VERSION) --build-arg SCALA_VERSION=$(SCALA_VERSION) --build-arg KAFKA_VERSION=$(KAFKA_VERSION) .
@@ -88,3 +89,12 @@ console-consumer-secure:
 	--consumer-property ssl.truststore.password=$(CLIENT_PASS)
 
 generate-all-certificates: generate-ca-cert generate-keystore generate-signed-cert import-ca-certs
+
+run-multiple: build
+	@ docker stack deploy -c docker-compose.multiple.yml kafka
+
+create-topic-multiple:
+	@ $(bash) kafka bin/kafka-topics.sh --create --zookeeper localhost:2181 --replication-factor 3 --partitions 3 --topic $(topic)
+
+log-kafka-multiple:
+	@ docker service logs -f kafka_kafka$(instance)

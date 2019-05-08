@@ -126,3 +126,25 @@ $ make console-consumer-secure
 ```
 $ make console-consumer-secure topic=test
 ```
+
+## Comandos Kafka Multiple
+
+#### Despliega el broker:
+```
+$ make run-multiple
+```
+
+#### Crea un tópico de prueba (`default`):
+```
+$ make create-topic-multiple
+```
+
+#### Crea un tópico:
+```
+$ make create-topic-multiple topic=test
+```
+
+#### Muestra los logs del broker (usa parámetro `instance`):
+```
+$ make log-kafka-multiple instance=1
+```
