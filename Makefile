@@ -1,5 +1,5 @@
-keytool=docker run -it --rm -v kafka_certificates:/certs -w /certs openjdk:8-jre keytool
-openssl=docker run -it --rm -v kafka_certificates:/certs -w /certs openjdk:8-jre openssl
+keytool=docker run -it --rm -v kafka_certificates:/certs -w /certs --network host openjdk:8-jre keytool
+openssl=docker run -it --rm -v kafka_certificates:/certs -w /certs --network host openjdk:8-jre openssl
 bash=docker run -it --rm --entrypoint /bin/bash --network host
 
 topic=default
@@ -10,6 +10,9 @@ build:
 
 run: build
 	@ docker stack deploy -c docker-compose.yml kafka
+
+run-secure: build
+	@ docker stack deploy -c docker-compose.secure.yml kafka
 
 status:
 	@ docker stack ps kafka
@@ -24,7 +27,7 @@ log-zookeeper:
 	@ docker service logs -f kafka_zookeeper
 
 bash-kafka:
-	@ $(bash) -v kafka_data:/data -v kafka_logs:/kafka/logs kafka
+	@ $(bash) -v kafka_data:/data -v kafka_logs:/kafka/logs -v kafka_certificates:/certs kafka
 
 bash-zookeeper:
 	@ $(bash) -v zookeeper_data:/data -v zookeeper_datalog:/datalog -v zookeeper_logs:/logs zookeeper:3.4
@@ -64,8 +67,17 @@ print-signed-cert:
 generate-truststore:
 	@ $(keytool) -keystore kafka.server.truststore.jks -alias CARoot -import -file ca-cert -storepass $(pass) -keypass $(pass) -noprompt
 
-import-ca-cert:
+print-truststore:
+	@ $(keytool) -list -v -keystore kafka.server.truststore.jks
+
+import-ca-certs:
 	@ $(keytool) -keystore kafka.server.keystore.jks -alias CARoot -import -file ca-cert -storepass $(pass) -keypass $(pass) -noprompt
 	@ $(keytool) -keystore kafka.server.keystore.jks -import -file cert-signed -storepass $(pass) -keypass $(pass) -noprompt
 
-generate-all-certificates: generate-ca-cert generate-keystore generate-signed-cert generate-truststore import-ca-cert
+bash-certs:
+	@ $(bash) -v kafka_certificates:/certs -w /certs openjdk:8-jre
+
+test-secure-connection:
+	@ $(openssl) s_client -connect localhost:9093
+
+generate-all-certificates: generate-ca-cert generate-keystore generate-signed-cert generate-truststore import-ca-certs
