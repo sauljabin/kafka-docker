@@ -35,9 +35,9 @@ services:
       --override advertised.listeners=INTERNAL://kafka:9092,EXTERNAL://localhost:9093
       --override ssl.keystore.location=/certs/kafka.server.keystore.jks
       --override ssl.truststore.location=/certs/kafka.server.truststore.jks
-      --override ssl.key.password=123456
-      --override ssl.keystore.password=123456
-      --override ssl.truststore.password=123456
+      --override ssl.key.password=${SERVER_PASS}
+      --override ssl.keystore.password=${SERVER_PASS}
+      --override ssl.truststore.password=${SERVER_PASS}
 
 volumes:
   kafka_data:

@@ -1,12 +1,14 @@
+-include .env
+export
+
 keytool=docker run -it --rm -v kafka_certificates:/certs -w /certs --network host openjdk:8-jre keytool
 openssl=docker run -it --rm -v kafka_certificates:/certs -w /certs --network host openjdk:8-jre openssl
 bash=docker run -it --rm --entrypoint /bin/bash --network host
 
 topic=default
-pass=123456
 
 build:
-	@ docker build -t kafka .
+	@ docker build -t kafka --build-arg SCALA_VERSION=$(SCALA_VERSION) --build-arg KAFKA_VERSION=$(KAFKA_VERSION) .
 
 run: build
 	@ docker stack deploy -c docker-compose.yml kafka
@@ -52,27 +54,27 @@ print-ca-cert:
 	@ $(keytool) -printcert -v -file ca-cert
 
 generate-keystore:
-	@ $(keytool) -genkey -keystore kafka.server.keystore.jks -validity 365 -storepass $(pass) -keypass $(pass) -dname "CN=localhost" -storetype pkcs12
+	@ $(keytool) -genkey -keystore kafka.server.keystore.jks -validity 365 -storepass $(SERVER_PASS) -keypass $(SERVER_PASS) -dname "CN=localhost" -storetype pkcs12
 
 print-keystore:
 	@ $(keytool) -list -v -keystore kafka.server.keystore.jks
 
 generate-signed-cert:
-	@ $(keytool) -keystore kafka.server.keystore.jks -certreq -file cert-file -storepass $(pass) -keypass $(pass)
-	@ $(openssl) x509 -req -CA ca-cert -CAkey ca-key -in cert-file -out cert-signed -days 365 -CAcreateserial -passin pass:$(pass)
+	@ $(keytool) -keystore kafka.server.keystore.jks -certreq -file cert-file -storepass $(SERVER_PASS) -keypass $(SERVER_PASS)
+	@ $(openssl) x509 -req -CA ca-cert -CAkey ca-key -in cert-file -out cert-signed -days 365 -CAcreateserial -passin pass:$(SERVER_PASS)
 
 print-signed-cert:
 	@ $(keytool) -printcert -v -file cert-signed
 
 generate-truststore:
-	@ $(keytool) -keystore kafka.server.truststore.jks -alias CARoot -import -file ca-cert -storepass $(pass) -keypass $(pass) -noprompt
+	@ $(keytool) -keystore kafka.server.truststore.jks -alias CARoot -import -file ca-cert -storepass $(SERVER_PASS) -keypass $(SERVER_PASS) -noprompt
 
 print-truststore:
 	@ $(keytool) -list -v -keystore kafka.server.truststore.jks
 
 import-ca-certs:
-	@ $(keytool) -keystore kafka.server.keystore.jks -alias CARoot -import -file ca-cert -storepass $(pass) -keypass $(pass) -noprompt
-	@ $(keytool) -keystore kafka.server.keystore.jks -import -file cert-signed -storepass $(pass) -keypass $(pass) -noprompt
+	@ $(keytool) -keystore kafka.server.keystore.jks -alias CARoot -import -file ca-cert -storepass $(SERVER_PASS) -keypass $(SERVER_PASS) -noprompt
+	@ $(keytool) -keystore kafka.server.keystore.jks -import -file cert-signed -storepass $(SERVER_PASS) -keypass $(SERVER_PASS) -noprompt
 
 bash-certs:
 	@ $(bash) -v kafka_certificates:/certs -w /certs openjdk:8-jre
