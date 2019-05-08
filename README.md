@@ -9,6 +9,7 @@
 
 - https://github.com/31z4/zookeeper-docker
 - https://hub.docker.com/_/zookeeper
+- https://docs.confluent.io/2.0.0/kafka/ssl.html
 
 ## Comandos Docker
 
@@ -88,3 +89,5 @@ $ make console-consumer
 ```
 $ make console-consumer topic=test
 ```
+
+## Comandos Kafka/SSL

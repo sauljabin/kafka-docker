@@ -66,20 +66,25 @@ generate-signed-cert:
 print-signed-cert:
 	@ $(keytool) -printcert -v -file cert-signed
 
-generate-truststore:
-	@ $(keytool) -keystore kafka.server.truststore.jks -alias CARoot -import -file ca-cert -storepass $(SERVER_PASS) -keypass $(SERVER_PASS) -noprompt
-
-print-truststore:
-	@ $(keytool) -list -v -keystore kafka.server.truststore.jks
-
 import-ca-certs:
+	@ $(keytool) -keystore kafka.server.truststore.jks -alias CARoot -import -file ca-cert -storepass $(SERVER_PASS) -keypass $(SERVER_PASS) -noprompt
 	@ $(keytool) -keystore kafka.server.keystore.jks -alias CARoot -import -file ca-cert -storepass $(SERVER_PASS) -keypass $(SERVER_PASS) -noprompt
 	@ $(keytool) -keystore kafka.server.keystore.jks -import -file cert-signed -storepass $(SERVER_PASS) -keypass $(SERVER_PASS) -noprompt
+	@ $(keytool) -keystore kafka.client.truststore.jks -alias CARoot -import -file ca-cert -storepass $(CLIENT_PASS) -keypass $(CLIENT_PASS) -noprompt
 
 bash-certs:
 	@ $(bash) -v kafka_certificates:/certs -w /certs openjdk:8-jre
 
-test-secure-connection:
-	@ $(openssl) s_client -connect localhost:9093
+console-producer-secure:
+	@ $(bash) -v kafka_certificates:/certs kafka bin/kafka-console-producer.sh --broker-list localhost:9093 --topic $(topic) \
+	--producer-property security.protocol=SSL \
+    --producer-property ssl.truststore.location=/certs/kafka.client.truststore.jks \
+    --producer-property ssl.truststore.password=$(CLIENT_PASS)
 
-generate-all-certificates: generate-ca-cert generate-keystore generate-signed-cert generate-truststore import-ca-certs
+console-consumer-secure:
+	@ $(bash) -v kafka_certificates:/certs kafka bin/kafka-console-consumer.sh --bootstrap-server localhost:9093 --topic $(topic) --from-beginning \
+	--consumer-property security.protocol=SSL \
+	--consumer-property ssl.truststore.location=/certs/kafka.client.truststore.jks \
+	--consumer-property ssl.truststore.password=$(CLIENT_PASS)
+
+generate-all-certificates: generate-ca-cert generate-keystore generate-signed-cert import-ca-certs
