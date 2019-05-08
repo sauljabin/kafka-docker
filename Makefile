@@ -80,8 +80,8 @@ bash-certs:
 console-producer-secure:
 	@ $(bash) -v kafka_certificates:/certs kafka bin/kafka-console-producer.sh --broker-list localhost:9093 --topic $(topic) \
 	--producer-property security.protocol=SSL \
-    --producer-property ssl.truststore.location=/certs/kafka.client.truststore.jks \
-    --producer-property ssl.truststore.password=$(CLIENT_PASS)
+	--producer-property ssl.truststore.location=/certs/kafka.client.truststore.jks \
+	--producer-property ssl.truststore.password=$(CLIENT_PASS)
 
 console-consumer-secure:
 	@ $(bash) -v kafka_certificates:/certs kafka bin/kafka-console-consumer.sh --bootstrap-server localhost:9093 --topic $(topic) --from-beginning \
