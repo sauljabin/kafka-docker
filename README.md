@@ -3,7 +3,7 @@
 ## Tech Stack
 
 - [zookeeper](https://hub.docker.com/_/zookeeper) v3.14
-- [kafka](https://kafka.apache.org/quickstart) v2.12-2.1.1
+- [kafka](https://kafka.apache.org/quickstart) v2.12-2.2.0
 
 ## Links
 
@@ -91,3 +91,38 @@ $ make console-consumer topic=test
 ```
 
 ## Comandos Kafka/SSL
+
+#### Genera los certificados y los keystore para la configuración de seguridad, crea el volume `kafka_certificates`:
+```
+$ generate-all-certificates
+```
+
+#### Despliega el broker seguro:
+```
+$ make run-secure
+```
+
+#### Abre un terminal para manipular los certificados:
+```
+$ make bash-certs
+```
+
+#### Ejemplo de productor (tópico `default`):
+```
+$ make console-producer-secure
+```
+
+#### Ejemplo de productor:
+```
+$ make console-producer-secure topic=test
+```
+
+#### Ejemplo de consumidor (tópico `default`):
+```
+$ make console-consumer-secure
+```
+
+#### Ejemplo de consumidor:
+```
+$ make console-consumer-secure topic=test
+```

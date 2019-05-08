@@ -13,9 +13,6 @@ build:
 run: build
 	@ docker stack deploy -c docker-compose.yml kafka
 
-run-secure: build
-	@ docker stack deploy -c docker-compose.secure.yml kafka
-
 status:
 	@ docker stack ps kafka
 
@@ -45,6 +42,9 @@ console-producer:
 
 console-consumer:
 	@ $(bash) kafka bin/kafka-console-consumer.sh --bootstrap-server localhost:9093 --topic $(topic) --from-beginning
+
+run-secure: build
+	@ docker stack deploy -c docker-compose.secure.yml kafka
 
 generate-ca-cert:
 	@ docker volume create kafka_certificates
