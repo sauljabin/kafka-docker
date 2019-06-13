@@ -2,7 +2,7 @@
 
 Kafka Tag `2.12-2.2.1`
 
-Zookeeper Tage `3.4`
+Zookeeper Tag `3.4`
 
 ## Quick reference
 
@@ -33,7 +33,7 @@ $ make build run
 ## Docker Stack Examples
 
 - [docker-compose.yml](docker-compose.yml)
-- [docker-compose.segure.yml](docker-compose.segure.yml)
+- [docker-compose.secure.yml](docker-compose.secure.yml)
 - [docker-compose.multiple.yml](docker-compose.multiple.yml)
 
 ```yaml
@@ -79,6 +79,12 @@ volumes:
   zookeeper_logs:
   zookeeper_datalog:
 ```
+
+## Docker CMD
+
+Default: `CMD ["kafka", "config/server.properties"]`
+
+You could change the properties path adding a volume to `/kafka/config` path.
 
 ## Using from Docker Hub
 
