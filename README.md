@@ -1,160 +1,182 @@
 # kafka-docker
 
-## Tech Stack
+Kafka Tag `2.12-2.2.1`
 
-- [zookeeper](https://hub.docker.com/_/zookeeper) v3.14
-- [kafka](https://kafka.apache.org/quickstart) v2.12-2.2.0
+Zookeeper Tage `3.4`
 
-## Links
+## Quick reference
 
-- https://github.com/31z4/zookeeper-docker
-- https://hub.docker.com/_/zookeeper
-- https://docs.confluent.io/2.0.0/kafka/ssl.html
+- [Git Hub](https://github.com/sauljabin/kafka-docker)
+- [Kafla Docker Hub](https://hub.docker.com/r/sauljabin/kafka)
+- [Zookeeper Docker Hub](https://hub.docker.com/_/zookeeper)
 
-## Comandos Docker
+## Documentation
 
-#### Construye la imagen de docker `kafka:latest`:
+- [Kafka](https://kafka.apache.org)
+- [Zookeeper](https://zookeeper.apache.org)
+
+## Getting Started
+
+```
+$ docker swarm init
+$ make build run
+```
+
+## Default Ports
+
+| Port | Description |
+| - | - |
+| 2181 | Zookeeper port |
+| 9092 | Internal Kafka port |
+| 9093 | External Kafka port |
+
+## Docker Stack Examples
+
+- [docker-compose.yml](docker-compose.yml)
+- [docker-compose.segure.yml](docker-compose.segure.yml)
+- [docker-compose.multiple.yml](docker-compose.multiple.yml)
+
+```yaml
+version: '3.7'
+
+services:
+  zookeeper:
+    image: zookeeper:3.4
+    environment:
+      - TZ=America/Guayaquil
+      - ZOO_MY_ID=1
+      - ZOO_SERVERS=server.1=0.0.0.0:2888:3888
+      - ZOO_LOG4J_PROP=INFO,ROLLINGFILE
+    ports:
+      - 2181:2181
+    volumes:
+      - zookeeper_data:/data
+      - zookeeper_datalog:/datalog
+      - zookeeper_logs:/logs
+
+  kafka:
+    image: kafka
+    environment:
+      - TZ=America/Guayaquil
+    ports:
+      - 9093:9093
+    volumes:
+      - kafka_data:/data
+      - kafka_logs:/kafka/logs
+    command: >
+      --override broker.id=1
+      --override log.dirs=/data
+      --override zookeeper.connect=zookeeper:2181
+      --override listener.security.protocol.map=INTERNAL:PLAINTEXT,EXTERNAL:PLAINTEXT
+      --override inter.broker.listener.name=INTERNAL
+      --override listeners=INTERNAL://0.0.0.0:9092,EXTERNAL://0.0.0.0:9093
+      --override advertised.listeners=INTERNAL://kafka:9092,EXTERNAL://localhost:9093
+
+volumes:
+  kafka_data:
+  kafka_logs:
+  zookeeper_data:
+  zookeeper_logs:
+  zookeeper_datalog:
+```
+
+## Using from Docker Hub
+
+Image: `sauljabin/kafka`.
+
+```bash
+$ docker pull sauljabin/kafka
+```
+
+Stack:
+
+```yaml
+version: '3.7'
+
+services:
+  kafka:
+    image: sauljabin/kafka
+```
+
+## Make Commands
+
+#### Builds the docker image: `kafka:latest`
 ```
 $ make build
 ```
 
-#### Despliegua broker en docker swarm:
+#### Deploys a kafka broker
 ```
 $ make run
 ```
 
-#### Muestra la información del stack:
+#### Shows the stack status
 ```
 $ make status
 ```
 
-#### Detiene los servicios:
+#### Stops stack
 ```
 $ make stop
 ```
 
-#### Muestra los logs del broker:
-```
-$ make log-kafka
-```
+## Commands for Kafka
 
-#### Muestra los logs de zookeeper:
-```
-$ make log-zookeeper
-```
-
-#### Crea una instancia del broker y abre un terminal:
-```
-$ make bash-kafka
-```
-
-#### Crea una instancia de zookeeper y abre un terminal:
-```
-$ make bash-zookeeper
-```
-
-## Comandos Kafka
-
-#### Crea un tópico de prueba (`default`):
-```
-$ make create-topic
-```
-
-#### Crea un tópico:
+#### Creates a topic
 ```
 $ make create-topic topic=test
 ```
 
-#### Muestra la lista de tópicos:
+#### Muestra la lista de tópicos
 ```
-$ make list-topic
-```
-
-#### Ejemplo de productor (tópico `default`):
-```
-$ make console-producer
+$ make topic-list
 ```
 
-#### Ejemplo de productor:
+#### Creates a console producer connection
 ```
 $ make console-producer topic=test
 ```
 
-#### Ejemplo de consumidor (tópico `default`):
-```
-$ make console-consumer
-```
-
-#### Ejemplo de consumidor:
+#### Creates a console consumer connection
 ```
 $ make console-consumer topic=test
 ```
 
-## Comandos Kafka/SSL
+## Kafka/SSL
 
-#### Genera los certificados y los keystore para la configuración de seguridad, crea el volume `kafka_certificates`:
+#### Generates the key store files and creates a `kafka_certificates` volume
 ```
 $ generate-all-certificates
 ```
 
-#### Despliega el broker seguro:
+#### Deploys kafka using SSL
 ```
 $ make run-secure
 ```
 
-#### Abre un terminal para manipular los certificados:
-```
-$ make bash-certs
-```
-
-#### Ejemplo de productor (tópico `default`):
-```
-$ make console-producer-secure
-```
-
-#### Ejemplo de productor:
+#### Creates a console producer with SSL connection
 ```
 $ make console-producer-secure topic=test
 ```
 
-#### Ejemplo de consumidor (tópico `default`):
-```
-$ make console-consumer-secure
-```
-
-#### Ejemplo de consumidor:
+#### Creates a console consumer with SSL connection
 ```
 $ make console-consumer-secure topic=test
 ```
 
-## Comandos Kafka Multiple
+## Run a kafka cluster example
 
-#### Despliega el broker:
+#### Deploys kafka cluster
 ```
 $ make run-multiple
 ```
 
-#### Crea un tópico de prueba (`default`):
-```
-$ make create-topic-multiple
-```
-
-#### Crea un tópico:
+#### Creates a topic
 ```
 $ make create-topic-multiple topic=test
 ```
 
-#### Muestra los logs del broker (usa parámetro `instance`):
-```
-$ make log-kafka-multiple instance=1
-```
-
-#### Ejemplo de consumidor (tópico `default`, grupo `default`):
-```
-$ make console-consumer-multiple
-```
-
-#### Ejemplo de consumidor:
+#### Creates a console consumer for the cluster
 ```
 $ make console-consumer-multiple topic=test group=test
 ```

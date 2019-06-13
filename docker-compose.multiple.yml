@@ -2,7 +2,7 @@ version: '3.7'
 
 services:
   zookeeper:
-    image: zookeeper:${ZOOKEEPER_VERSION}
+    image: zookeeper:3.4
     environment:
       - TZ=America/Guayaquil
       - ZOO_MY_ID=1
@@ -16,7 +16,7 @@ services:
       - zookeeper_logs:/logs
 
   kafka1:
-    image: kafka:${KAFKA_VERSION}
+    image: kafka
     environment:
       - TZ=America/Guayaquil
     ports:
@@ -34,7 +34,7 @@ services:
       --override advertised.listeners=INTERNAL://kafka1:9092,EXTERNAL://localhost:9093
 
   kafka2:
-    image: kafka:${KAFKA_VERSION}
+    image: kafka
     environment:
       - TZ=America/Guayaquil
     ports:
@@ -52,7 +52,7 @@ services:
       --override advertised.listeners=INTERNAL://kafka2:9092,EXTERNAL://localhost:9094
 
   kafka3:
-    image: kafka:${KAFKA_VERSION}
+    image: kafka
     environment:
       - TZ=America/Guayaquil
     ports:
