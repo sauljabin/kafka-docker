@@ -13,7 +13,8 @@ Kafka Tag `2.8`
 Check the [docker-compose.yml](docker-compose.yml) file.
 
 ```
-$ docker-compose -p kafka up
+$ docker-compose -p kafka up --build
+$ docker-compose -p kafka down
 ```
 
 ## Default Ports
@@ -27,6 +28,8 @@ $ docker-compose -p kafka up
 ## Volumes
 
 You could change the properties path adding a volume to `/kafka/config` (`config/zookeeper.properties` and `config/server.properties`) path.
+
+For zoe configuration `/zoe/config/default.yml`.
 
 ## Commands
 
@@ -47,10 +50,20 @@ $ docker-compose -p kafka exec kafka kafka-topics.sh --list --zookeeper zookeepe
 
 #### Console producer:
 ```
-$ docker-compose -p kafka exec kafka kafka-console-producer.sh --broker-list kafka:9093 --topic test
+$ docker-compose -p kafka exec kafka kafka-console-producer.sh --broker-list kafka:9092 --topic test
 ```
 
 #### Console consumer:
 ```
 $ docker-compose -p kafka exec kafka kafka-console-consumer.sh --bootstrap-server kafka:9092 --topic test --from-beginning
+```
+
+#### Using ZOE
+```
+$ docker-compose -p kafka exec kafka zoe --output table topics consume test -n 5
+```
+
+### Using kafkacat
+```
+$ docker-compose -p kafka exec kafka kafkacat -b kafka:9092 -t test
 ```
