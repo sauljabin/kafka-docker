@@ -63,7 +63,7 @@ $ docker-compose -p kafka exec kafka kafka-console-consumer.sh --bootstrap-serve
 $ docker-compose -p kafka exec kafka zoe --output table topics consume test -n 5
 ```
 
-### Using kafkacat
+#### Using kafkacat
 ```
 $ docker-compose -p kafka exec kafka kafkacat -b kafka:9092 -t test
 ```
