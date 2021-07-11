@@ -2,9 +2,6 @@ FROM openjdk:11-jre
 
 LABEL maintainer="sauljabin@gmail.com"
 
-RUN apt-get update && \
-    apt-get install -y wget kafkacat vim
-
 ENV SCALA_VERSION 2.13
 ENV KAFKA_VERSION 2.8.0
 ENV KAFKA_URL "https://downloads.apache.org/kafka/${KAFKA_VERSION}/kafka_2.13-${KAFKA_VERSION}.tgz"
@@ -17,6 +14,9 @@ ENV ZOE_HOME /zoe
 ENV ZOE_BIN ${ZOE_HOME}/bin
 
 ENV PATH $PATH:${KAFKA_BIN}:${ZOE_BIN}
+
+RUN apt-get update && \
+    apt-get install -y wget kafkacat vim
 
 RUN wget -q "${ZOE_URL}" -O /tmp/zoe.tar && \
     mkdir ${ZOE_HOME} && \
