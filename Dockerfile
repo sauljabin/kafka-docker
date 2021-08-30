@@ -1,18 +1,31 @@
-FROM openjdk:8-jre
+FROM openjdk:11-jre
 
 LABEL maintainer="sauljabin@gmail.com"
 
+RUN apt-get update && \
+    apt-get install -y wget kafkacat vim
+
 ENV SCALA_VERSION 2.13
 ENV KAFKA_VERSION 2.8.0
+ENV KAFKA_URL "https://downloads.apache.org/kafka/${KAFKA_VERSION}/kafka_2.13-${KAFKA_VERSION}.tgz"
 ENV KAFKA_HOME /kafka
-ENV KAFKA_URL https://downloads.apache.org/kafka/2.8.0/kafka_2.13-2.8.0.tgz
 ENV KAFKA_BIN ${KAFKA_HOME}/bin
-ENV PATH $PATH:${KAFKA_BIN}
 
-WORKDIR ${KAFKA_HOME}
+ENV ZOE_VERSION=0.27.2
+ENV ZOE_URL "https://github.com/adevinta/zoe/releases/download/v${ZOE_VERSION}/zoe-${ZOE_VERSION}.tar"
+ENV ZOE_HOME /zoe
+ENV ZOE_BIN ${ZOE_HOME}/bin
+
+ENV PATH $PATH:${KAFKA_BIN}:${ZOE_BIN}
+
+RUN wget -q "${ZOE_URL}" -O /tmp/zoe.tar && \
+    mkdir ${ZOE_HOME} && \
+    tar fx /tmp/zoe.tar --strip-components 1 -C ${ZOE_HOME} && \
+    rm /tmp/zoe.tar
 
 RUN wget -q "${KAFKA_URL}" -O /tmp/kafka.tgz && \
-    tar xfz /tmp/kafka.tgz --strip-components 1 && \
+    mkdir ${KAFKA_HOME} && \
+    tar xfz /tmp/kafka.tgz --strip-components 1 -C ${KAFKA_HOME} && \
     rm /tmp/kafka.tgz
 
 RUN ln -s ${KAFKA_BIN}/kafka-server-start.sh ${KAFKA_BIN}/kafka
@@ -20,3 +33,6 @@ RUN ln -s ${KAFKA_BIN}/zookeeper-server-start.sh ${KAFKA_BIN}/zookeeper
 
 COPY server.properties ${KAFKA_HOME}/config
 COPY zookeeper.properties ${KAFKA_HOME}/config
+COPY zoe.yml ${ZOE_HOME}/config/default.yml
+
+WORKDIR ${KAFKA_HOME}
