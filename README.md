@@ -4,9 +4,11 @@ Kafka Tag `2.8`
 
 ## Quick reference
 
-- [Git Hub](https://github.com/sauljabin/kafka-docker)
-- [Kafka](https://kafka.apache.org)
-- [Zookeeper](https://zookeeper.apache.org)
+- [github](https://github.com/sauljabin/kafka-docker)
+- [kafka](https://kafka.apache.org)
+- [zookeeper](https://zookeeper.apache.org)
+- [kafkacat](https://github.com/edenhill/kafkacat)
+- [zoe](https://github.com/adevinta/zoe)
 
 ## Getting Started
 
