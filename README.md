@@ -1,7 +1,7 @@
 # kafka-docker
 
-- kafka `2.8`
-- docker tags: `kafka:2.8`, `kafka:latest`
+- kafka `2.8.1`
+- docker tags: `kafka:2.8.1`, `kafka:latest`
 
 ## Quick reference
 
