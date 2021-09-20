@@ -21,7 +21,7 @@
 
 Check the [docker-compose.yml](docker-compose.yml) file.
 ```sh
-docker compose up --build
+docker compose up
 docker compose down
 ```
 
