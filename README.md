@@ -1,5 +1,8 @@
 # kafka-docker
 
+<a href="https://hub.docker.com/r/sauljabin/kafka"><img alt="Docker Image Version (latest by date)" src="https://img.shields.io/docker/v/sauljabin/kafka"></a>
+<a href="https://hub.docker.com/r/sauljabin/kafka"><img alt="Docker Image Size (latest by date)" src="https://img.shields.io/docker/image-size/sauljabin/kafka"></a>
+
 - kafka `2.8.1`
 - docker tags: `kafka:2.8.1`, `kafka:latest`
 
