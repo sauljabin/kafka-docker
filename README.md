@@ -1,10 +1,12 @@
 # kafka-docker
 
-Kafka Tag `2.8`
+- kafka `2.8`
+- docker tags: `kafka:2.8`, `kafka:latest`
 
 ## Quick reference
 
 - [github](https://github.com/sauljabin/kafka-docker)
+- [dockerhub](https://hub.docker.com/r/sauljabin/kafka)
 - [kafka](https://kafka.apache.org)
 - [zookeeper](https://zookeeper.apache.org)
 - [kafkacat](https://github.com/edenhill/kafkacat)
@@ -13,10 +15,16 @@ Kafka Tag `2.8`
 ## Getting Started
 
 Check the [docker-compose.yml](docker-compose.yml) file.
-
+```sh
+docker compose up --build
+docker compose down
 ```
-$ docker-compose -p kafka up --build
-$ docker-compose -p kafka down
+
+## Using DockerHub
+
+Pulling:
+```sh
+docker pull sauljabin/kafka:latest
 ```
 
 ## Default Ports
@@ -29,43 +37,67 @@ $ docker-compose -p kafka down
 
 ## Volumes
 
-You could change the properties path adding a volume to `/kafka/config` (`config/zookeeper.properties` and `config/server.properties`) path.
+You could change the properties path adding a volume to `/kafka/config` path.
+
+Zookeeper `config/zookeeper.properties`:
+```yaml
+    volumes:
+      - zookeeper_data:/data
+      - zookeeper_datalog:/datalog
+      - zookeeper_logs:/kafka/logs
+      - zookeeper_config:/kafka/config
+```
+
+Kafka `config/server.properties`:
+```yaml
+    volumes:
+      - kafka_data:/data
+      - kafka_logs:/kafka/logs
+      - kafka_config:/kafka/config
+```
 
 For zoe configuration `/zoe/config/default.yml`.
+```yaml
+    volumes:
+      - kafka_data:/data
+      - kafka_logs:/kafka/logs
+      - kafka_config:/kafka/config
+      - ./zoe.yml:/zoe/config/default.yml
+```
 
 ## Commands
 
-#### Open a command line in the container
-```
-$ docker-compose -p kafka exec kafka bash
-```
-
-#### Create a topic:
-```
-$ docker-compose -p kafka exec kafka kafka-topics.sh --create --zookeeper zookeeper:2181 --replication-factor 1 --partitions 1 --topic test
+Open a command line in the container:
+```sh
+docker compose exec kafka bash
 ```
 
-#### Topic list:
-```
-$ docker-compose -p kafka exec kafka kafka-topics.sh --list --zookeeper zookeeper:2181
-```
-
-#### Console producer:
-```
-$ docker-compose -p kafka exec kafka kafka-console-producer.sh --broker-list kafka:9092 --topic test
+Create a topic:
+```sh
+docker compose exec kafka kafka-topics.sh --create --zookeeper zookeeper:2181 --replication-factor 1 --partitions 1 --topic test
 ```
 
-#### Console consumer:
-```
-$ docker-compose -p kafka exec kafka kafka-console-consumer.sh --bootstrap-server kafka:9092 --topic test --from-beginning
-```
-
-#### Using ZOE
-```
-$ docker-compose -p kafka exec kafka zoe --output table topics consume test -n 5
+Topic list:
+```sh
+docker compose exec kafka kafka-topics.sh --list --zookeeper zookeeper:2181
 ```
 
-#### Using kafkacat
+Console producer:
+```sh
+docker compose exec kafka kafka-console-producer.sh --broker-list kafka:9092 --topic test
 ```
-$ docker-compose -p kafka exec kafka kafkacat -b kafka:9092 -t test
+
+Console consumer:
+```sh
+docker compose exec kafka kafka-console-consumer.sh --bootstrap-server kafka:9092 --topic test --from-beginning
+```
+
+Using ZOE:
+```sh
+docker compose exec kafka zoe --output table topics consume test -n 5
+```
+
+Using kafkacat:
+```sh
+docker compose exec kafka kafkacat -b kafka:9092 -t test
 ```

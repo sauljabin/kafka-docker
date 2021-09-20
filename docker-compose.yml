@@ -15,7 +15,7 @@ services:
 
   kafka:
     build: .
-    depends_on: 
+    depends_on:
       - zookeeper
     restart: on-failure
     environment:
