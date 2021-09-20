@@ -12,6 +12,9 @@ jobs:
       - name: Check Out Repo
         uses: actions/checkout@v2
 
+      - uses: olegtarasov/get-tag@v2.1
+        id: tagName
+
       - name: Login to Docker Hub
         uses: docker/login-action@v1
         with:
@@ -29,7 +32,7 @@ jobs:
           context: ./
           file: ./Dockerfile
           push: true
-          tags: ${{ secrets.DOCKER_HUB_USERNAME }}/kafka:latest,${{ secrets.DOCKER_HUB_USERNAME }}/kafka:${{ github.event.release.tag_name }}
+          tags: ${{ secrets.DOCKER_HUB_USERNAME }}/kafka:latest,${{ secrets.DOCKER_HUB_USERNAME }}/kafka:${{ steps.tagName.outputs.tag }}
 
       - name: Image digest
         run: echo ${{ steps.docker_build.outputs.digest }}
