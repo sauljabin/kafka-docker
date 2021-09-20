@@ -2,7 +2,7 @@ version: '3.7'
 
 services:
   zookeeper:
-    build: .
+    image: sauljabin/kafka:latest
     environment:
       - TZ=America/Guayaquil
     ports:
@@ -14,7 +14,7 @@ services:
     command: zookeeper config/zookeeper.properties
 
   kafka:
-    build: .
+    image: sauljabin/kafka:latest
     depends_on:
       - zookeeper
     restart: on-failure

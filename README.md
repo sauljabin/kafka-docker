@@ -25,11 +25,11 @@ docker compose up --build
 docker compose down
 ```
 
-## Using DockerHub
+## Building Locally (for development)
 
 Pulling:
 ```sh
-docker pull sauljabin/kafka:latest
+docker build -t sauljabin/kafka:latest .
 ```
 
 ## Default Ports
