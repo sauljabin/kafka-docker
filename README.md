@@ -5,8 +5,8 @@
 <a href="https://hub.docker.com/r/sauljabin/kafka"><img alt="Docker Image Version (latest by date)" src="https://img.shields.io/docker/v/sauljabin/kafka"></a>
 <a href="https://hub.docker.com/r/sauljabin/kafka"><img alt="Docker Image Size (latest by date)" src="https://img.shields.io/docker/image-size/sauljabin/kafka"></a>
 
-- kafka `2.8.1`
-- docker tags: `kafka:2.8.1`, `kafka:latest`
+- kafka `3.0.0`
+- docker tags: `sauljabin/kafka:3.0.0`, `sauljabin/kafka:latest`
 
 ## Quick reference
 
@@ -21,7 +21,7 @@
 
 Check the [docker-compose.yml](docker-compose.yml) file.
 ```sh
-docker compose up
+docker compose up -d
 docker compose down
 ```
 
@@ -79,30 +79,30 @@ docker compose exec kafka bash
 
 Create a topic:
 ```sh
-docker compose exec kafka kafka-topics.sh --create --zookeeper zookeeper:2181 --replication-factor 1 --partitions 1 --topic test
+docker compose exec kafka kafka-topics.sh --create --bootstrap-server kafka:9092 --replication-factor 1 --partitions 1 --topic customers
 ```
 
 Topic list:
 ```sh
-docker compose exec kafka kafka-topics.sh --list --zookeeper zookeeper:2181
+docker compose exec kafka kafka-topics.sh --list --bootstrap-server kafka:9092
 ```
 
 Console producer:
 ```sh
-docker compose exec kafka kafka-console-producer.sh --broker-list kafka:9092 --topic test
+cat customers.txt | docker compose exec -T kafka kafka-console-producer.sh --broker-list kafka:9092 --topic customers
 ```
 
 Console consumer:
 ```sh
-docker compose exec kafka kafka-console-consumer.sh --bootstrap-server kafka:9092 --topic test --from-beginning
+docker compose exec kafka kafka-console-consumer.sh --bootstrap-server kafka:9092 --topic customers --from-beginning
 ```
 
-Using ZOE:
+Consuming using zoe:
 ```sh
-docker compose exec kafka zoe --output table topics consume test -n 5
+docker compose exec kafka zoe --output table topics consume customers
 ```
 
-Using kafkacat:
+Consuming using kafkacat:
 ```sh
-docker compose exec kafka kafkacat -b kafka:9092 -t test
+docker compose exec kafka kafkacat -b kafka:9092 -t customers
 ```

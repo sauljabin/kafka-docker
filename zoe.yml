@@ -11,4 +11,4 @@ clusters:
       key.deserializer: "org.apache.kafka.common.serialization.StringDeserializer"
       value.deserializer: "org.apache.kafka.common.serialization.StringDeserializer"
       key.serializer: "org.apache.kafka.common.serialization.StringSerializer"
-      value.serializer: "org.apache.kafka.common.serialization.ByteArraySerializer"
+      value.serializer: "org.apache.kafka.common.serialization.StringSerializer"
