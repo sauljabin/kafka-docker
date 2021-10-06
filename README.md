@@ -24,8 +24,58 @@
 
 Check the [docker-compose.yml](docker-compose.yml) file.
 ```sh
+docker network create kafka
 docker compose up -d
 docker compose down
+```
+
+## Usage
+
+Create an alias for `kafka-cli`:
+
+```bash
+alias kafka-cli='docker run --rm -it --network kafka sauljabin/kafka:latest '
+```
+
+To permanently add the alias to your shell (`~/.bashrc` or `~/.zshrc` file):
+
+```bash
+echo "alias kafka-cli='docker run --rm -it --network kafka sauljabin/kafka:latest '" >> ~/.zshrc
+```
+
+Open a command line in the container:
+```sh
+kafka-cli
+```
+
+Create a topic:
+```sh
+kafka-cli kafka-topics.sh --create --bootstrap-server kafka:9092 --replication-factor 1 --partitions 1 --topic customers
+```
+
+Topic list:
+```sh
+kafka-cli kafka-topics.sh --list --bootstrap-server kafka:9092
+```
+
+Console producer:
+```sh
+cat customers.txt | docker compose exec -T kafka kafka-console-producer.sh --broker-list kafka:9092 --topic customers
+```
+
+Console consumer:
+```sh
+kafka-cli kafka-console-consumer.sh --bootstrap-server kafka:9092 --topic customers --from-beginning
+```
+
+Consuming using zoe:
+```sh
+kafka-cli zoe --output table topics consume customers
+```
+
+Consuming using kafkacat:
+```sh
+kafka-cli kafkacat -b kafka:9092 -t customers
 ```
 
 ## Building Locally (for development)
@@ -71,41 +121,4 @@ For zoe configuration `/zoe/config/default.yml`.
       - kafka_logs:/kafka/logs
       - kafka_config:/kafka/config
       - ./zoe.yml:/zoe/config/default.yml
-```
-
-## Commands
-
-Open a command line in the container:
-```sh
-docker compose exec kafka bash
-```
-
-Create a topic:
-```sh
-docker compose exec kafka kafka-topics.sh --create --bootstrap-server kafka:9092 --replication-factor 1 --partitions 1 --topic customers
-```
-
-Topic list:
-```sh
-docker compose exec kafka kafka-topics.sh --list --bootstrap-server kafka:9092
-```
-
-Console producer:
-```sh
-cat customers.txt | docker compose exec -T kafka kafka-console-producer.sh --broker-list kafka:9092 --topic customers
-```
-
-Console consumer:
-```sh
-docker compose exec kafka kafka-console-consumer.sh --bootstrap-server kafka:9092 --topic customers --from-beginning
-```
-
-Consuming using zoe:
-```sh
-docker compose exec kafka zoe --output table topics consume customers
-```
-
-Consuming using kafkacat:
-```sh
-docker compose exec kafka kafkacat -b kafka:9092 -t customers
 ```
