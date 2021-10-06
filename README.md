@@ -11,7 +11,7 @@
 - kafka `3.0.0`
 - docker tags: `sauljabin/kafka:3.0.0`, `sauljabin/kafka:latest`
 
-## Quick reference
+## Quick Reference
 
 - [github](https://github.com/sauljabin/kafka-docker)
 - [dockerhub](https://hub.docker.com/r/sauljabin/kafka)
@@ -50,22 +50,23 @@ kafka-cli
 
 Create a topic:
 ```sh
-kafka-cli kafka-topics.sh --create --bootstrap-server kafka:9092 --replication-factor 1 --partitions 1 --topic customers
+kafka-cli kafka-topics --create --bootstrap-server kafka:9092 --replication-factor 1 --partitions 1 --topic customers
 ```
 
 Topic list:
 ```sh
-kafka-cli kafka-topics.sh --list --bootstrap-server kafka:9092
+kafka-cli kafka-topics --list --bootstrap-server kafka:9092
 ```
 
 Console producer:
 ```sh
-cat customers.txt | docker compose exec -T kafka kafka-console-producer.sh --broker-list kafka:9092 --topic customers
+kafka-cli bash -c "echo '"'{"name": "John Doe", "email": "john.doe@gmail.com"}'"' | kafka-console-producer --broker-list kafka:9092 --topic customers"
+kafka-cli bash -c "echo '"'{"name": "Jane Doe", "email": "jane.doe@gmail.com"}'"' | kafka-console-producer --broker-list kafka:9092 --topic customers"
 ```
 
 Console consumer:
 ```sh
-kafka-cli kafka-console-consumer.sh --bootstrap-server kafka:9092 --topic customers --from-beginning
+kafka-cli kafka-console-consumer --bootstrap-server kafka:9092 --topic customers --from-beginning
 ```
 
 Consuming using zoe:
@@ -80,7 +81,7 @@ kafka-cli kafkacat -b kafka:9092 -t customers
 
 ## Building Locally (for development)
 
-Pulling:
+Build:
 ```sh
 docker build -t sauljabin/kafka:latest .
 ```
@@ -114,7 +115,7 @@ Kafka `config/server.properties`:
       - kafka_config:/kafka/config
 ```
 
-For zoe configuration `/zoe/config/default.yml`.
+Zoe configuration `/zoe/config/default.yml`.
 ```yaml
     volumes:
       - kafka_data:/data

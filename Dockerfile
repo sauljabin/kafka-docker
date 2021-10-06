@@ -28,6 +28,7 @@ RUN wget -q "${KAFKA_URL}" -O /tmp/kafka.tgz && \
     tar xfz /tmp/kafka.tgz --strip-components 1 -C ${KAFKA_HOME} && \
     rm /tmp/kafka.tgz
 
+RUN for i in ${KAFKA_BIN}/*.sh; do ln -s "$i" "${i%.sh}"; done
 RUN ln -s ${KAFKA_BIN}/kafka-server-start.sh ${KAFKA_BIN}/kafka
 RUN ln -s ${KAFKA_BIN}/zookeeper-server-start.sh ${KAFKA_BIN}/zookeeper
 
