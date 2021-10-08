@@ -17,7 +17,6 @@ services:
     image: sauljabin/kafka:latest
     depends_on:
       - zookeeper
-    restart: on-failure
     environment:
       - TZ=America/Guayaquil
     ports:
