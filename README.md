@@ -15,10 +15,15 @@
 
 - [github](https://github.com/sauljabin/kafka-docker)
 - [dockerhub](https://hub.docker.com/r/sauljabin/kafka)
+
+## Software Installed in the Docker Image
+
 - [kafka](https://kafka.apache.org)
 - [zookeeper](https://zookeeper.apache.org)
 - [kafkacat](https://github.com/edenhill/kafkacat)
 - [zoe](https://github.com/adevinta/zoe)
+- [jq](https://stedolan.github.io/jq/)
+- [httpie](https://httpie.org/)
 
 ## Getting Started
 

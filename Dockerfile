@@ -16,7 +16,7 @@ ENV ZOE_BIN ${ZOE_HOME}/bin
 ENV PATH $PATH:${KAFKA_BIN}:${ZOE_BIN}
 
 RUN apt-get update && \
-    apt-get install -y wget kafkacat vim
+    apt-get install -y wget kafkacat vim jq httpie curl
 
 RUN wget -q "${ZOE_URL}" -O /tmp/zoe.tar && \
     mkdir ${ZOE_HOME} && \
