@@ -5,6 +5,7 @@ services:
     image: sauljabin/kafka:latest
     environment:
       - TZ=America/Guayaquil
+    restart: on-failure
     ports:
       - 2181:2181
     volumes:
@@ -15,10 +16,11 @@ services:
 
   kafka:
     image: sauljabin/kafka:latest
-    depends_on:
-      - zookeeper
     environment:
       - TZ=America/Guayaquil
+    depends_on:
+      - zookeeper
+    restart: on-failure
     ports:
       - 9093:9093
     volumes:
