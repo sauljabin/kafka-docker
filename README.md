@@ -37,13 +37,11 @@ docker compose down
 ## Usage
 
 Create an alias for `kafka-cli`:
-
 ```bash
 alias kafka-cli='docker run --rm -it --network kafka sauljabin/kafka:latest '
 ```
 
 To permanently add the alias to your shell (`~/.bashrc` or `~/.zshrc` file):
-
 ```bash
 echo "alias kafka-cli='docker run --rm -it --network kafka sauljabin/kafka:latest '" >> ~/.zshrc
 ```
@@ -86,9 +84,9 @@ kafka-cli kafkacat -b kafka:9092 -t customers
 
 ## Default Ports
 
-| Port | Description |
-| - | - |
-| 2181 | Zookeeper port |
+| Port | Description         |
+| ---- | ------------------- |
+| 2181 | Zookeeper port      |
 | 9092 | Internal Kafka port |
 | 9093 | External Kafka port |
 
@@ -133,4 +131,9 @@ Linters:
 ```sh
 hadolint Dockerfile
 yamllint .
+```
+
+Pre-commit:
+```sh
+pre-commit install
 ```
