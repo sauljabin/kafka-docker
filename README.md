@@ -84,13 +84,6 @@ Consuming using kafkacat:
 kafka-cli kafkacat -b kafka:9092 -t customers
 ```
 
-## Building Locally (for development)
-
-Build:
-```sh
-docker build -t sauljabin/kafka:latest .
-```
-
 ## Default Ports
 
 | Port | Description |
@@ -127,4 +120,17 @@ Zoe configuration `/zoe/config/default.yml`.
       - kafka_logs:/kafka/logs
       - kafka_config:/kafka/config
       - ./zoe.yml:/zoe/config/default.yml
+```
+
+## Development
+
+Build image locally:
+```sh
+docker build -t sauljabin/kafka:latest .
+```
+
+Linters:
+```sh
+hadolint Dockerfile
+yamllint .
 ```

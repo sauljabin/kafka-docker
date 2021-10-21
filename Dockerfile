@@ -15,22 +15,27 @@ ENV ZOE_BIN ${ZOE_HOME}/bin
 
 ENV PATH $PATH:${KAFKA_BIN}:${ZOE_BIN}
 
-RUN apt-get update && \
-    apt-get install -y wget kafkacat vim jq httpie curl
-
-RUN wget -q "${ZOE_URL}" -O /tmp/zoe.tar && \
-    mkdir ${ZOE_HOME} && \
-    tar fx /tmp/zoe.tar --strip-components 1 -C ${ZOE_HOME} && \
-    rm /tmp/zoe.tar
-
-RUN wget -q "${KAFKA_URL}" -O /tmp/kafka.tgz && \
-    mkdir ${KAFKA_HOME} && \
-    tar xfz /tmp/kafka.tgz --strip-components 1 -C ${KAFKA_HOME} && \
-    rm /tmp/kafka.tgz
-
-RUN for i in ${KAFKA_BIN}/*.sh; do ln -s "$i" "${i%.sh}"; done
-RUN ln -s ${KAFKA_BIN}/kafka-server-start.sh ${KAFKA_BIN}/kafka
-RUN ln -s ${KAFKA_BIN}/zookeeper-server-start.sh ${KAFKA_BIN}/zookeeper
+RUN apt-get update \
+    && apt-get install -y --no-install-recommends \
+        wget \
+        kafkacat \
+        vim \
+        httpie \
+        curl \
+        jq \
+    && apt-get clean \
+    && rm -rf /var/lib/apt/lists/* \
+    && wget -q "${ZOE_URL}" -O /tmp/zoe.tar \
+    && mkdir ${ZOE_HOME} \
+    && tar xf /tmp/zoe.tar --strip-components 1 -C ${ZOE_HOME} \
+    && rm /tmp/zoe.tar \
+    && wget -q "${KAFKA_URL}" -O /tmp/kafka.tgz \
+    && mkdir ${KAFKA_HOME} \
+    && tar xfz /tmp/kafka.tgz --strip-components 1 -C ${KAFKA_HOME} \
+    && rm /tmp/kafka.tgz \
+    && for i in "${KAFKA_BIN}"/*.sh; do ln -s "$i" "${i%.sh}"; done \
+    && ln -s ${KAFKA_BIN}/kafka-server-start.sh ${KAFKA_BIN}/kafka \
+    && ln -s ${KAFKA_BIN}/zookeeper-server-start.sh ${KAFKA_BIN}/zookeeper
 
 COPY server.properties ${KAFKA_HOME}/config
 COPY zookeeper.properties ${KAFKA_HOME}/config
