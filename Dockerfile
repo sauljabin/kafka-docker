@@ -3,7 +3,7 @@ FROM openjdk:11-jre
 LABEL maintainer="sauljabin@gmail.com"
 
 ENV SCALA_VERSION 2.13
-ENV KAFKA_VERSION 3.0.0
+ENV KAFKA_VERSION 3.1.0
 ENV KAFKA_URL "https://downloads.apache.org/kafka/${KAFKA_VERSION}/kafka_${SCALA_VERSION}-${KAFKA_VERSION}.tgz"
 ENV KAFKA_HOME /kafka
 ENV KAFKA_BIN ${KAFKA_HOME}/bin

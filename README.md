@@ -8,8 +8,9 @@
 <a href="https://hub.docker.com/r/sauljabin/kafka"><img alt="Docker Image Version (latest by date)" src="https://img.shields.io/docker/v/sauljabin/kafka"></a>
 <a href="https://hub.docker.com/r/sauljabin/kafka"><img alt="Docker Image Size (latest by date)" src="https://img.shields.io/docker/image-size/sauljabin/kafka"></a>
 
-- kafka `3.0.0`
-- docker tags: `sauljabin/kafka:3.0.0`, `sauljabin/kafka:latest`
+```
+docker pull sauljabin/kafka:latest
+```
 
 ## Quick Reference
 
@@ -136,4 +137,13 @@ yamllint .
 Pre-commit:
 ```sh
 pre-commit install
+```
+
+## Releasing a new version
+
+> Semver info [here](https://semver.org/)
+
+```
+git tag major.minor.patch
+git push --tags
 ```
