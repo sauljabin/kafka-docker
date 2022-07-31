@@ -20,10 +20,6 @@ docker pull sauljabin/kafka:latest
 
 - [kafka](https://kafka.apache.org)
 - [zookeeper](https://zookeeper.apache.org)
-- [kafkacat](https://github.com/edenhill/kafkacat)
-- [zoe](https://github.com/adevinta/zoe)
-- [jq](https://stedolan.github.io/jq/)
-- [httpie](https://httpie.org/)
 
 ## Getting Started
 
@@ -72,16 +68,6 @@ Console consumer:
 kafka-cli kafka-console-consumer --bootstrap-server kafka:9092 --topic customers --from-beginning
 ```
 
-Consuming using zoe:
-```sh
-kafka-cli zoe --output table topics consume customers
-```
-
-Consuming using kafkacat:
-```sh
-kafka-cli kafkacat -b kafka:9092 -t customers
-```
-
 ## Default Ports
 
 | Port | Description         |
@@ -109,15 +95,6 @@ Kafka `config/server.properties`:
       - kafka_data:/data
       - kafka_logs:/kafka/logs
       - kafka_config:/kafka/config
-```
-
-Zoe configuration `/zoe/config/default.yml`.
-```yaml
-    volumes:
-      - kafka_data:/data
-      - kafka_logs:/kafka/logs
-      - kafka_config:/kafka/config
-      - ./zoe.yml:/zoe/config/default.yml
 ```
 
 ## Development
