@@ -12,6 +12,7 @@ services:
       - zookeeper_data:/data
       - zookeeper_datalog:/datalog
       - zookeeper_logs:/kafka/logs
+      - ./config/zookeeper/zookeeper.properties:/kafka/config/zookeeper.properties
     command: zookeeper config/zookeeper.properties
 
   kafka:
@@ -26,6 +27,7 @@ services:
     volumes:
       - kafka_data:/data
       - kafka_logs:/kafka/logs
+      - ./config/zookeeper/server.properties:/kafka/config/server.properties
     command: kafka config/server.properties
 
 volumes:

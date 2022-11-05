@@ -30,6 +30,12 @@ docker compose up -d
 docker compose down
 ```
 
+Run using Kraft
+```sh
+docker compose -f docker-compose.kraft.yml up -d
+docker compose -f docker-compose.kraft.yml down
+```
+
 ## Usage
 
 Create an alias for `kafka-cli`:
@@ -102,6 +108,11 @@ Kafka `config/server.properties`:
 Build image locally:
 ```sh
 docker build -t sauljabin/kafka:latest .
+```
+
+Run a shell:
+```sh
+docker run --rm -it sauljabin/kafka:latest bash
 ```
 
 Linters:

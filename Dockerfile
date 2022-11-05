@@ -19,6 +19,3 @@ RUN apk update \
     && for i in "${KAFKA_BIN}"/*.sh; do ln -s "$i" "${i%.sh}"; done \
     && ln -s ${KAFKA_BIN}/kafka-server-start.sh ${KAFKA_BIN}/kafka \
     && ln -s ${KAFKA_BIN}/zookeeper-server-start.sh ${KAFKA_BIN}/zookeeper
-
-COPY server.properties ${KAFKA_HOME}/config
-COPY zookeeper.properties ${KAFKA_HOME}/config
