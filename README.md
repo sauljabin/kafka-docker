@@ -23,14 +23,14 @@ docker pull sauljabin/kafka:latest
 
 ## Getting Started
 
-Check the [docker-compose.yml](docker-compose.yml) file.
+Check the [docker-compose.yml](docker-compose.yml) file:
 ```sh
 docker network create kafka
 docker compose up -d
 docker compose down
 ```
 
-Run using Kraft
+Run using Kraft [docker-compose.kraft.yml](docker-compose.kraft.yml):
 ```sh
 docker compose -f docker-compose.kraft.yml up -d
 docker compose -f docker-compose.kraft.yml down
