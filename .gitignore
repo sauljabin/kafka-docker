@@ -10,3 +10,6 @@ gen
 
 # Visual Studio Code
 .dccache
+
+# kaskade
+kaskade.yml

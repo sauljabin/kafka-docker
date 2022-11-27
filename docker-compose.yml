@@ -13,7 +13,7 @@ services:
       - zookeeper_datalog:/datalog
       - zookeeper_logs:/kafka/logs
       - ./config/zookeeper/zookeeper.properties:/kafka/config/zookeeper.properties
-    command: zookeeper config/zookeeper.properties
+    command: zookeeper
 
   kafka:
     image: sauljabin/kafka:latest
@@ -27,8 +27,8 @@ services:
     volumes:
       - kafka_data:/data
       - kafka_logs:/kafka/logs
-      - ./config/zookeeper/server.properties:/kafka/config/server.properties
-    command: kafka config/server.properties
+      - ./config/zookeeper/kafka.properties:/kafka/config/kafka.properties
+    command: kafka
 
 volumes:
   kafka_data:

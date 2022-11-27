@@ -14,8 +14,11 @@ WORKDIR ${KAFKA_HOME}
 RUN apk update \
     && apk add --no-cache --upgrade wget bash openjdk17 \
     && wget -q "${KAFKA_URL}" -O /tmp/kafka.tgz \
-    && tar xfz /tmp/kafka.tgz --strip-components 1 -C ${KAFKA_HOME} \
+    && tar -xzf /tmp/kafka.tgz --strip-components 1 -C ${KAFKA_HOME} \
     && rm /tmp/kafka.tgz \
-    && for i in "${KAFKA_BIN}"/*.sh; do ln -s "$i" "${i%.sh}"; done \
-    && ln -s ${KAFKA_BIN}/kafka-server-start.sh ${KAFKA_BIN}/kafka \
-    && ln -s ${KAFKA_BIN}/zookeeper-server-start.sh ${KAFKA_BIN}/zookeeper
+    && for i in "${KAFKA_BIN}"/*.sh; do ln -s "$i" "${i%.sh}"; done
+
+COPY ./docker-entrypoint.sh ${KAFKA_BIN}/docker-entrypoint
+
+ENTRYPOINT ["docker-entrypoint"]
+CMD [ "kafka" ]

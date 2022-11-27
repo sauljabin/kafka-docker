@@ -11,9 +11,8 @@ services:
     volumes:
       - kafka_data:/data
       - kafka_logs:/kafka/logs
-      - ./config/kraft/server.properties:/kafka/config/server.properties
-    command: |
-      bash -c 'kafka-storage format --ignore-formatted --config config/server.properties --cluster-id $(kafka-storage random-uuid) && kafka config/server.properties'
+      - ./config/kraft/kafka.properties:/kafka/config/kafka.properties
+    command: kafka-raft
 
 volumes:
   kafka_data:

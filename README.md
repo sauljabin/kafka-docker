@@ -23,7 +23,7 @@ docker pull sauljabin/kafka:latest
 
 ## Getting Started
 
-Check the [docker-compose.yml](docker-compose.yml) file:
+Run using `zookeeper` [docker-compose.yml](docker-compose.yml) file:
 ```sh
 docker network create kafka
 docker compose up -d
@@ -38,40 +38,25 @@ docker compose -f docker-compose.kraft.yml down
 
 ## Usage
 
-Create an alias for `kafka-cli`:
-```bash
-alias kafka-cli='docker run --rm -it --network kafka sauljabin/kafka:latest '
-```
-
-To permanently add the alias to your shell (`~/.bashrc` or `~/.zshrc` file):
-```bash
-echo "alias kafka-cli='docker run --rm -it --network kafka sauljabin/kafka:latest '" >> ~/.zshrc
-```
-
-Open a command line in the container:
-```sh
-kafka-cli
-```
-
 Create a topic:
 ```sh
-kafka-cli kafka-topics --create --bootstrap-server kafka:9092 --replication-factor 1 --partitions 1 --topic customers
+kafka-topics --create --bootstrap-server localhost:9093 --replication-factor 1 --partitions 1 --topic customers
 ```
 
 Topic list:
 ```sh
-kafka-cli kafka-topics --list --bootstrap-server kafka:9092
+kafka-topics --list --bootstrap-server localhost:9093
 ```
 
 Console producer:
 ```sh
-kafka-cli bash -c "echo '"'{"name": "John Doe", "email": "john.doe@gmail.com"}'"' | kafka-console-producer --broker-list kafka:9092 --topic customers"
-kafka-cli bash -c "echo '"'{"name": "Jane Doe", "email": "jane.doe@gmail.com"}'"' | kafka-console-producer --broker-list kafka:9092 --topic customers"
+echo '{"name": "John Doe", "email": "john.doe@gmail.com"}' | kafka-console-producer --broker-list localhost:9093 --topic customers
+echo '{"name": "Jane Doe", "email": "jane.doe@gmail.com"}' | kafka-console-producer --broker-list localhost:9093 --topic customers
 ```
 
 Console consumer:
 ```sh
-kafka-cli kafka-console-consumer --bootstrap-server kafka:9092 --topic customers --from-beginning
+kafka-console-consumer --bootstrap-server localhost:9093 --topic customers --from-beginning
 ```
 
 ## Default Ports
@@ -84,23 +69,29 @@ kafka-cli kafka-console-consumer --bootstrap-server kafka:9092 --topic customers
 
 ## Volumes
 
-You could change the properties path adding a volume to `/kafka/config` path.
-
-Zookeeper `config/zookeeper.properties`:
+Zookeeper:
 ```yaml
     volumes:
       - zookeeper_data:/data
       - zookeeper_datalog:/datalog
       - zookeeper_logs:/kafka/logs
-      - zookeeper_config:/kafka/config
+      - ./config/zookeeper/zookeeper.properties:/kafka/config/zookeeper.properties
 ```
 
-Kafka `config/server.properties`:
+Kafka:
 ```yaml
     volumes:
       - kafka_data:/data
       - kafka_logs:/kafka/logs
-      - kafka_config:/kafka/config
+      - - ./config/zookeeper/kafka.properties:/kafka/config/kafka.properties
+```
+
+Kraft:
+```yaml
+    volumes:
+      - kafka_data:/data
+      - kafka_logs:/kafka/logs
+      - - ./config/kraft/kafka.properties:/kafka/config/kafka.properties
 ```
 
 ## Development
