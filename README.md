@@ -25,8 +25,8 @@ docker pull sauljabin/kafka:latest
 
 Run using `zookeeper` [docker-compose.yml](docker-compose.yml) file:
 ```sh
-docker compose -p kafka-zookeeper up -d
-docker compose -p kafka-zookeeper down
+docker compose -p kafka-zk up -d
+docker compose -p kafka-zk down
 ```
 
 Run using Kraft [docker-compose.kraft.yml](docker-compose.kraft.yml):
@@ -91,7 +91,7 @@ Kafka:
     volumes:
       - kafka_data1:/data
       - kafka_logs1:/kafka/logs
-      - - ./config/zookeeper/kafka1.properties:/kafka/config/kafka.properties
+      - ./config/zookeeper/kafka1.properties:/kafka/config/kafka.properties
 ```
 
 Kraft:
@@ -99,7 +99,7 @@ Kraft:
     volumes:
       - kafka_data1:/data
       - kafka_logs1:/kafka/logs
-      - - ./config/kraft/kafka1.properties:/kafka/config/kafka.properties
+      - ./config/kraft/kafka1.properties:/kafka/config/kafka.properties
 ```
 
 ## Development
