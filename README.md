@@ -73,7 +73,7 @@ kafka-console-consumer --bootstrap-server localhost:19092 --topic customers --fr
 | 9092 | Internal Kafka Port |
 | 9094 | Controller Kafka Port |
 | 19092, 29092, 39092 | External Kafka Ports |
-| 19095, 19095, 19095 | JMX Ports |
+| 19095, 29095, 39095 | JMX Ports |
 
 ## Volumes
 
