@@ -36,27 +36,32 @@ docker compose -f docker-compose.kraft.yml up -d
 docker compose -f docker-compose.kraft.yml down
 ```
 
+Run `jsonsole`:
+```
+jconsole localhost:19095
+```
+
 ## Usage
 
 Create a topic:
 ```sh
-kafka-topics --create --bootstrap-server localhost:9093 --replication-factor 1 --partitions 1 --topic customers
+kafka-topics --create --bootstrap-server localhost:19092 --replication-factor 1 --partitions 1 --topic customers
 ```
 
 Topic list:
 ```sh
-kafka-topics --list --bootstrap-server localhost:9093
+kafka-topics --list --bootstrap-server localhost:19092
 ```
 
 Console producer:
 ```sh
-echo '{"name": "John Doe", "email": "john.doe@gmail.com"}' | kafka-console-producer --broker-list localhost:9093 --topic customers
-echo '{"name": "Jane Doe", "email": "jane.doe@gmail.com"}' | kafka-console-producer --broker-list localhost:9093 --topic customers
+echo '{"name": "John Doe", "email": "john.doe@gmail.com"}' | kafka-console-producer --broker-list localhost:19092 --topic customers
+echo '{"name": "Jane Doe", "email": "jane.doe@gmail.com"}' | kafka-console-producer --broker-list localhost:19092 --topic customers
 ```
 
 Console consumer:
 ```sh
-kafka-console-consumer --bootstrap-server localhost:9093 --topic customers --from-beginning
+kafka-console-consumer --bootstrap-server localhost:19092 --topic customers --from-beginning
 ```
 
 ## Default Ports
@@ -65,7 +70,7 @@ kafka-console-consumer --bootstrap-server localhost:9093 --topic customers --fro
 | ---- | ------------------- |
 | 2181 | Zookeeper port      |
 | 9092 | Internal Kafka port |
-| 9093 | External Kafka port |
+| 19092 | External Kafka port |
 
 ## Volumes
 

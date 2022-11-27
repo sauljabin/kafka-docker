@@ -5,9 +5,11 @@ services:
     image: sauljabin/kafka:latest
     environment:
       - TZ=America/Guayaquil
+      - JMX_PORT=19095
     restart: on-failure
     ports:
-      - 9093:9093
+      - 19092:19092
+      - 19095:19095
     volumes:
       - kafka_data:/data
       - kafka_logs:/kafka/logs
