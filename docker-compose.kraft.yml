@@ -1,26 +1,58 @@
 version: '3.9'
 
 services:
-  kafka:
+  kafka1:
     image: sauljabin/kafka:latest
     environment:
       - TZ=America/Guayaquil
       - JMX_PORT=19095
+      - CLUSTER_ID=wxLxPZtASCerxqrSIVDzjw
     restart: on-failure
     ports:
       - 19092:19092
       - 19095:19095
     volumes:
-      - kafka_data:/data
-      - kafka_logs:/kafka/logs
-      - ./config/kraft/kafka.properties:/kafka/config/kafka.properties
+      - kafka_data1:/data
+      - kafka_logs1:/kafka/logs
+      - ./config/kraft/kafka1.properties:/kafka/config/kafka.properties
+    command: kafka-raft
+
+  kafka2:
+    image: sauljabin/kafka:latest
+    environment:
+      - TZ=America/Guayaquil
+      - JMX_PORT=29095
+      - CLUSTER_ID=wxLxPZtASCerxqrSIVDzjw
+    restart: on-failure
+    ports:
+      - 29092:29092
+      - 29095:29095
+    volumes:
+      - kafka_data2:/data
+      - kafka_logs2:/kafka/logs
+      - ./config/kraft/kafka2.properties:/kafka/config/kafka.properties
+    command: kafka-raft
+
+  kafka3:
+    image: sauljabin/kafka:latest
+    environment:
+      - TZ=America/Guayaquil
+      - JMX_PORT=39095
+      - CLUSTER_ID=wxLxPZtASCerxqrSIVDzjw
+    restart: on-failure
+    ports:
+      - 39092:39092
+      - 39095:39095
+    volumes:
+      - kafka_data3:/data
+      - kafka_logs3:/kafka/logs
+      - ./config/kraft/kafka3.properties:/kafka/config/kafka.properties
     command: kafka-raft
 
 volumes:
-  kafka_data:
-  kafka_logs:
-
-networks:
-  default:
-    external: true
-    name: kafka
+  kafka_data1:
+  kafka_data2:
+  kafka_data3:
+  kafka_logs1:
+  kafka_logs2:
+  kafka_logs3:

@@ -25,16 +25,17 @@ docker pull sauljabin/kafka:latest
 
 Run using `zookeeper` [docker-compose.yml](docker-compose.yml) file:
 ```sh
-docker network create kafka
-docker compose up -d
-docker compose down
+docker compose -p kafka-zookeeper up -d
+docker compose -p kafka-zookeeper down
 ```
 
 Run using Kraft [docker-compose.kraft.yml](docker-compose.kraft.yml):
 ```sh
-docker compose -f docker-compose.kraft.yml up -d
-docker compose -f docker-compose.kraft.yml down
+docker compose -p kafka-raft -f docker-compose.kraft.yml up -d
+docker compose -p kafka-raft -f docker-compose.kraft.yml down
 ```
+
+> For generating a new cluster id run: `kafka-storage random-uuid` and set `CLUSTER_ID` env variable.
 
 Run `jsonsole`:
 ```
@@ -45,7 +46,7 @@ jconsole localhost:19095
 
 Create a topic:
 ```sh
-kafka-topics --create --bootstrap-server localhost:19092 --replication-factor 1 --partitions 1 --topic customers
+kafka-topics --create --bootstrap-server localhost:19092 --topic customers
 ```
 
 Topic list:
@@ -68,9 +69,11 @@ kafka-console-consumer --bootstrap-server localhost:19092 --topic customers --fr
 
 | Port | Description         |
 | ---- | ------------------- |
-| 2181 | Zookeeper port      |
-| 9092 | Internal Kafka port |
-| 19092 | External Kafka port |
+| 2181 | Zookeeper Port      |
+| 9092 | Internal Kafka Port |
+| 9094 | Controller Kafka Port |
+| 19092, 29092, 39092 | External Kafka Ports |
+| 19095, 19095, 19095 | JMX Ports |
 
 ## Volumes
 
@@ -86,17 +89,17 @@ Zookeeper:
 Kafka:
 ```yaml
     volumes:
-      - kafka_data:/data
-      - kafka_logs:/kafka/logs
-      - - ./config/zookeeper/kafka.properties:/kafka/config/kafka.properties
+      - kafka_data1:/data
+      - kafka_logs1:/kafka/logs
+      - - ./config/zookeeper/kafka1.properties:/kafka/config/kafka.properties
 ```
 
 Kraft:
 ```yaml
     volumes:
-      - kafka_data:/data
-      - kafka_logs:/kafka/logs
-      - - ./config/kraft/kafka.properties:/kafka/config/kafka.properties
+      - kafka_data1:/data
+      - kafka_logs1:/kafka/logs
+      - - ./config/kraft/kafka1.properties:/kafka/config/kafka.properties
 ```
 
 ## Development
