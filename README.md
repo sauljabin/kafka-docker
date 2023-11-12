@@ -6,6 +6,8 @@
 <a href="https://hub.docker.com/r/sauljabin/kafka"><img alt="Docker Image Version (latest by date)" src="https://img.shields.io/docker/v/sauljabin/kafka"></a>
 <a href="https://hub.docker.com/r/sauljabin/kafka"><img alt="Docker Image Size (latest by date)" src="https://img.shields.io/docker/image-size/sauljabin/kafka"></a>
 
+This projects allows you to deploy a Kafka using KRaft.
+
 ```
 docker pull sauljabin/kafka:latest
 ```
@@ -22,16 +24,10 @@ docker pull sauljabin/kafka:latest
 
 ## Getting Started
 
-Run using `zookeeper` [docker-compose.yml](docker-compose.yml) file:
+Run a sandbox:
 ```sh
-docker compose -p kafka-zk up -d
-docker compose -p kafka-zk down
-```
-
-Run using Kraft [docker-compose.kraft.yml](docker-compose.kraft.yml):
-```sh
-docker compose -p kafka-raft -f docker-compose.kraft.yml up -d
-docker compose -p kafka-raft -f docker-compose.kraft.yml down
+docker compose -p kafka up -d
+docker compose -p kafka down
 ```
 
 > For generating a new cluster id run: `kafka-storage random-uuid` and set `CLUSTER_ID` env variable.
@@ -42,6 +38,8 @@ jconsole localhost:19095
 ```
 
 ## Usage
+
+> Install kafka cli tools using https://github.com/sauljabin/kafka-cli-installer.
 
 Create a topic:
 ```sh
@@ -68,38 +66,10 @@ kafka-console-consumer --bootstrap-server localhost:19092 --topic customers --fr
 
 | Port | Description         |
 | ---- | ------------------- |
-| 2181 | Zookeeper Port      |
 | 9092 | Internal Kafka Port |
 | 9094 | Controller Kafka Port |
 | 19092, 29092, 39092 | External Kafka Ports |
 | 19095, 29095, 39095 | JMX Ports |
-
-## Volumes
-
-Zookeeper:
-```yaml
-    volumes:
-      - zookeeper_data:/data
-      - zookeeper_datalog:/datalog
-      - zookeeper_logs:/kafka/logs
-      - ./config/zookeeper/zookeeper.properties:/kafka/config/zookeeper.properties
-```
-
-Kafka:
-```yaml
-    volumes:
-      - kafka_data1:/data
-      - kafka_logs1:/kafka/logs
-      - ./config/zookeeper/kafka1.properties:/kafka/config/kafka.properties
-```
-
-Kraft:
-```yaml
-    volumes:
-      - kafka_data1:/data
-      - kafka_logs1:/kafka/logs
-      - ./config/kraft/kafka1.properties:/kafka/config/kafka.properties
-```
 
 ## Development
 
@@ -111,6 +81,11 @@ docker build -t sauljabin/kafka:latest .
 Run a shell:
 ```sh
 docker run --rm -it sauljabin/kafka:latest bash
+```
+
+Run a single node:
+```sh
+docker run -d -p 9092:9092 --name kafka sauljabin/kafka:latest
 ```
 
 Linters:

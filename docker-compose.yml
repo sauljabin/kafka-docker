@@ -1,72 +1,71 @@
-version: '3.9'
-
 services:
-  zookeeper:
-    image: sauljabin/kafka:latest
-    environment:
-      - TZ=America/Guayaquil
-    restart: on-failure
-    ports:
-      - 2181:2181
-    volumes:
-      - zookeeper_data:/data
-      - zookeeper_datalog:/datalog
-      - zookeeper_logs:/kafka/logs
-      - ./config/zookeeper/zookeeper.properties:/kafka/config/zookeeper.properties
-    command: zookeeper
-
   kafka1:
     image: sauljabin/kafka:latest
     environment:
-      - TZ=America/Guayaquil
-      - JMX_PORT=19095
+      JMX_PORT: "19095"
+      CLUSTER_ID: wxLxPZtASCerxqrSIVDzjw
+      KAFKA_NODE_ID: "1"
+      KAFKA_CONTROLLER_QUORUM_VOTERS: 1@kafka1:9094,2@kafka2:9094,3@kafka3:9094
+      KAFKA_LISTENERS: INTERNAL://0.0.0.0:9092,EXTERNAL://0.0.0.0:19092,CONTROLLER://0.0.0.0:9094
+      KAFKA_ADVERTISED_LISTENERS: INTERNAL://kafka1:9092,EXTERNAL://localhost:19092
+      KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: CONTROLLER:PLAINTEXT,INTERNAL:PLAINTEXT,EXTERNAL:PLAINTEXT
+      KAFKA_DEFAULT_REPLICATION_FACTOR: "3"
+      KAFKA_MIN_INSYNC_REPLICAS: "2"
+      KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: "3"
+      KAFKA_TRANSACTION_STATE_LOG_REPLICATION_FACTOR: "3"
+      KAFKA_TRANSACTION_STATE_LOG_MIN_ISR: "2"
     restart: on-failure
     ports:
-      - 19092:19092
-      - 19095:19095
+      - "19092:19092"
+      - "19095:19095"
     volumes:
-      - kafka_data1:/data
-      - kafka_logs1:/kafka/logs
-      - ./config/zookeeper/kafka1.properties:/kafka/config/kafka.properties
-    command: kafka
+      - kafka1_data:/data
 
   kafka2:
     image: sauljabin/kafka:latest
     environment:
-      - TZ=America/Guayaquil
-      - JMX_PORT=29095
+      JMX_PORT: "29095"
+      CLUSTER_ID: wxLxPZtASCerxqrSIVDzjw
+      KAFKA_NODE_ID: "2"
+      KAFKA_CONTROLLER_QUORUM_VOTERS: 1@kafka1:9094,2@kafka2:9094,3@kafka3:9094
+      KAFKA_LISTENERS: INTERNAL://0.0.0.0:9092,EXTERNAL://0.0.0.0:29092,CONTROLLER://0.0.0.0:9094
+      KAFKA_ADVERTISED_LISTENERS: INTERNAL://kafka1:9092,EXTERNAL://localhost:29092
+      KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: CONTROLLER:PLAINTEXT,INTERNAL:PLAINTEXT,EXTERNAL:PLAINTEXT
+      KAFKA_DEFAULT_REPLICATION_FACTOR: "3"
+      KAFKA_MIN_INSYNC_REPLICAS: "2"
+      KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: "3"
+      KAFKA_TRANSACTION_STATE_LOG_REPLICATION_FACTOR: "3"
+      KAFKA_TRANSACTION_STATE_LOG_MIN_ISR: "2"
     restart: on-failure
     ports:
-      - 29092:29092
-      - 29095:29095
+      - "29092:29092"
+      - "29095:29095"
     volumes:
-      - kafka_data2:/data
-      - kafka_logs2:/kafka/logs
-      - ./config/zookeeper/kafka2.properties:/kafka/config/kafka.properties
-    command: kafka
+      - kafka2_data:/data
 
   kafka3:
     image: sauljabin/kafka:latest
     environment:
-      - TZ=America/Guayaquil
-      - JMX_PORT=39095
+      JMX_PORT: "39095"
+      CLUSTER_ID: wxLxPZtASCerxqrSIVDzjw
+      KAFKA_NODE_ID: "3"
+      KAFKA_CONTROLLER_QUORUM_VOTERS: 1@kafka1:9094,2@kafka2:9094,3@kafka3:9094
+      KAFKA_LISTENERS: INTERNAL://0.0.0.0:9092,EXTERNAL://0.0.0.0:39092,CONTROLLER://0.0.0.0:9094
+      KAFKA_ADVERTISED_LISTENERS: INTERNAL://kafka1:9092,EXTERNAL://localhost:39092
+      KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: CONTROLLER:PLAINTEXT,INTERNAL:PLAINTEXT,EXTERNAL:PLAINTEXT
+      KAFKA_DEFAULT_REPLICATION_FACTOR: "3"
+      KAFKA_MIN_INSYNC_REPLICAS: "2"
+      KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: "3"
+      KAFKA_TRANSACTION_STATE_LOG_REPLICATION_FACTOR: "3"
+      KAFKA_TRANSACTION_STATE_LOG_MIN_ISR: "2"
     restart: on-failure
     ports:
-      - 39092:39092
-      - 39095:39095
+      - "39092:39092"
+      - "39095:39095"
     volumes:
-      - kafka_data3:/data
-      - kafka_logs3:/kafka/logs
-      - ./config/zookeeper/kafka3.properties:/kafka/config/kafka.properties
-    command: kafka
+      - kafka3_data:/data
 
 volumes:
-  zookeeper_data:
-  zookeeper_logs:
-  zookeeper_datalog:
-  kafka_data1:
-  kafka_data2:
-  kafka_data3:
-  kafka_logs1:
-  kafka_logs2:
-  kafka_logs3:
+  kafka1_data:
+  kafka2_data:
+  kafka3_data:
